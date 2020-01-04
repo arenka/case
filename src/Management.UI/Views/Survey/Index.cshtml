@@ -1,0 +1,67 @@
+﻿@model SurveyCreateModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <form method="post">
+        <div class="form-group">
+            <label>Makale</label>
+            <select asp-for="ArticleId" class="form-control">
+                <option>Makale Seçimiz</option>
+                @foreach (var item in Model.ArticleModelList)
+                {
+                    <option value="@item.Id" data-desc="@item.Description">@item.Title</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <textarea class="form-control"></textarea>
+        </div>
+
+        <br />
+        @{
+            foreach (var item in Model.QuestionModelList.Select((value, i) => new { i, value }))
+            {
+                <div class="form-group">
+                    <input type="text" class="form-control" asp-for="@Model.QuestionModelList[item.i].Question" placeholder="Soru @(item.i+1)" />
+                </div>
+
+                <div class="row">
+                    @foreach (var itemAnswer in item.value.AnswerModelList.Select((value, i) => new { i, value }))
+                    {
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <input type="text" class="form-control" asp-for="@Model.QuestionModelList[item.i].AnswerModelList[itemAnswer.i].Answer" placeholder="@itemAnswer.value.DisplaySign)" />
+                            </div>
+                        </div>
+                        <input type="hidden" asp-for="@Model.QuestionModelList[item.i].AnswerModelList[itemAnswer.i].DisplaySign" value="@itemAnswer.value.DisplaySign"/>
+                    }
+                    <div class="form-group offset-5">
+                        <select asp-for="@Model.QuestionModelList[item.i].CorrectAnswer" asp-items="Html.GetEnumSelectList<DisplaySign>()" class="form-control">
+                            <option selected="selected">Doğru Cevabı Seç</option>
+                        </select>
+                    </div>
+                </div>
+            }
+        }
+        <div class="form-group offset-5">
+            <button type="submit" class="btn btn-primary btn-lg"> SINAV OLUŞTUR</button>
+        </div>
+    </form>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('select').on('change', function () {
+                var optionSelected = $("option:selected", this);
+                //console.log(optionSelected.data('desc'));
+                $('textarea').val(optionSelected.data('desc'));
+            });
+        });
+    </script>
+}

@@ -1,0 +1,35 @@
+﻿
+@model List<Management.Core.Domain.Survey>
+@{
+    ViewData["Title"] = "GetSurveyList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Title</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Select((value, i) => new { i, value }))
+        {
+            <tr>
+                <th scope="row">@(item.i + 1)</th>
+                <th></th>
+                <th></th>
+                <td>
+                <td>
+                    <a href="#">@item.value.Article.Title</a>
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-danger btn-sm">Sil</button>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
